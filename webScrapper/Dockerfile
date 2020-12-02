@@ -1,9 +1,12 @@
 FROM node:12
 
-WORKDIR /app/scrapper
+RUN ["mkdir", "/install"]
 
-COPY ./package.json ./
-
+ADD ["./package.json", "/install"]
+WORKDIR /install
 RUN npm install
+ENV NODE_PATH=/install/node_modules
+
+WORKDIR /app/scrapper
 
 COPY . .

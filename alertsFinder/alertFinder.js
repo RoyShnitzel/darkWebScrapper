@@ -1,4 +1,5 @@
 const { Data, KeyWord, Alert } = require("../models");
+const axios = require("axios");
 const eventEmitter = require("../eventEmitter");
 const { Op } = require("sequelize");
 
