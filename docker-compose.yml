@@ -32,6 +32,7 @@ services:
         ipv4_address: 172.22.0.11
 
   server-scrapping:
+    container_name: node-server
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -57,7 +58,29 @@ services:
         ipv4_address: 172.22.0.12
     depends_on:
       - mysql
+
+  dark-web-scrapper:
+    container_name: scrapper
+    build:
+      context: ./webScrapper
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./webScrapper
+        target: /app/scrapper
+    command: node index.js
+    environment:
+      - NODE_ENV=development
+      - IP_ADDRESS=172.22.0.11
+      - WEBHOOK_IP=172.22.0.12
+      - WEBHOOK_PORT=8000
+
+    networks:
+      frontApp:
+        ipv4_address: 172.22.0.13
+    depends_on:
       - tor-browser
+      - server-scrapping
 
 networks:
   frontApp:

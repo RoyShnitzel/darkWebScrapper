@@ -1,4 +1,5 @@
 const scrapperRouter = require("express").Router();
+const eventEmitter = require("../eventEmitter");
 const { Data } = require("../models");
 const { Op } = require("sequelize");
 const ner = require("wink-ner");
@@ -101,6 +102,20 @@ scrapperRouter.get("/", async (req, res) => {
   }
 });
 
+// lastEntry data
+scrapperRouter.get("/last-entry", async (req, res) => {
+  try {
+    const lastEntry = await Data.findOne({
+      attribute: ["date"],
+      order: [["date", "DESC"]],
+    });
+    res.status(200).json(lastEntry);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Cannot process request" });
+  }
+});
+
 scrapperRouter.get("/:sentimentParam", async (req, res) => {
   try {
     const { sentimentParam } = req.params;
@@ -143,13 +158,13 @@ scrapperRouter.get("/:sentimentParam", async (req, res) => {
 // add data
 scrapperRouter.post("/", async (req, res) => {
   try {
-    const destructedData = {
-      title: req.body.title,
-      author: req.body.author,
-      content: req.body.content,
-      date: req.body.date,
-    };
-    await Data.create(destructedData);
+    const { data } = req.body;
+    await Data.bulkCreate(data);
+    if (data.length > 0) {
+      eventEmitter.emit("newData", data.length);
+    } else {
+      console.log("There is No New Data");
+    }
     res.sendStatus(201);
   } catch (error) {
     console.error(error);
@@ -157,7 +172,19 @@ scrapperRouter.post("/", async (req, res) => {
   }
 });
 
-// update data
+// error data
+scrapperRouter.post("/error", async (req, res) => {
+  try {
+    const { error } = req.body;
+    console.error(error);
+    eventEmitter.emit("scrapperFailed");
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: "Cannot process request" });
+  }
+});
+
 scrapperRouter.patch("/:id", async (req, res) => {
   const { id } = req.params;
   try {
