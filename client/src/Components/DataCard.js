@@ -34,10 +34,12 @@ export default function DataCard({ data }) {
           color="textSecondary"
           gutterBottom
         >
-          Author: {data.author} {data.score ? `Score: ${data.score}` : ""}
+          <div style={{ fontFamily: "DM Sans" }}>
+            Author: {data.author} {data.score ? `Score: ${data.score}` : ""}
+          </div>
         </Typography>
         <Typography variant="h5" component="h2">
-          Title: {data.title}
+          <div style={{ fontFamily: "DM Sans" }}>Title: {data.title}</div>
         </Typography>
         {data.nerAnalysis && data.nerAnalysis.length > 0 ? (
           <Typography variant="h5" component="h2">
@@ -47,12 +49,14 @@ export default function DataCard({ data }) {
           </Typography>
         ) : null}
         <Typography variant="body2" component="p">
-          {data.content}
+          <div style={{ fontFamily: "DM Sans" }}>{data.content}</div>
         </Typography>
       </CardContent>
       <CardActions>
         <Typography size="small">
-          Date: {new Date(data.date).toUTCString()}
+          <div style={{ fontFamily: "DM Sans" }}>
+            Date: {new Date(data.date).toUTCString()}
+          </div>
         </Typography>
       </CardActions>
     </Card>

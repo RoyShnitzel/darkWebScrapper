@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -16,16 +16,18 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import AnnouncementIcon from "@material-ui/icons/Announcement";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(0),
   },
   title: {
     flexGrow: 1,
+    paddingBottom: "0.25%",
   },
   link: {
     color: "white",
@@ -44,43 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
     "&:active": {
       textDecoration: "none",
-    },
-  },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
-  },
-  searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inputRoot: {
-    color: "inherit",
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
     },
   },
 }));
@@ -123,7 +88,7 @@ export default function NavBar({ notificationsData, setNotifications }) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar className={classes.navBar} position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -135,15 +100,19 @@ export default function NavBar({ notificationsData, setNotifications }) {
               <LanguageIcon />
             </Link>
           </IconButton>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             <Link className={classes.link} to="/">
-              Dark Web Scrapper
+              <div style={{ fontFamily: "DM Sans", fontWeight: "bold" }}>
+                Dark Web Scrapper
+              </div>
             </Link>
           </Typography>
           <IconButton onClick={handleMenu} color="inherit">
-            <Badge badgeContent={notificationsData.length} color="secondary">
-              <NotificationsIcon />
-            </Badge>
+            <Tooltip title="Notifications" aria-label="add">
+              <Badge badgeContent={notificationsData.length} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </Tooltip>
           </IconButton>
           <Menu
             id="simple-menu"
@@ -162,7 +131,7 @@ export default function NavBar({ notificationsData, setNotifications }) {
                   Notifications
                 </Typography>
                 <Button onClick={() => handleReadAll()}>
-                  Mark All As Read
+                  <div style={{ fontSize: 10 }}>Mark All As Read</div>
                 </Button>
               </div>
             ) : null}
@@ -177,7 +146,7 @@ export default function NavBar({ notificationsData, setNotifications }) {
                         <Link className={classes.link} to="/alerts">
                           <div
                             style={{
-                              color: "blue",
+                              color: "#457b9d",
                               display: "flex",
                               justifyContent: "center",
                             }}
@@ -196,7 +165,7 @@ export default function NavBar({ notificationsData, setNotifications }) {
                       >
                         <div
                           style={{
-                            color: "red",
+                            color: "#9d0208",
                             display: "flex",
                             justifyContent: "center",
                           }}
@@ -214,7 +183,7 @@ export default function NavBar({ notificationsData, setNotifications }) {
                       >
                         <div
                           style={{
-                            color: "green",
+                            color: "#90be6d",
                             display: "flex",
                             justifyContent: "center",
                           }}
@@ -235,11 +204,14 @@ export default function NavBar({ notificationsData, setNotifications }) {
               color="inherit"
               aria-label="menu"
             >
-              <ErrorIcon /> Alerts
-              <ErrorIcon />
+              <Tooltip title="Alerts" aria-label="add">
+                <ErrorIcon />
+              </Tooltip>
             </IconButton>
           </Link>
-          <Button onClick={() => setOpen(true)}>KeyWords</Button>
+          <Button onClick={() => setOpen(true)}>
+            <span style={{ color: "white" }}>KeyWords</span>
+          </Button>
           <KeyWordModal
             open={open}
             setOpen={setOpen}

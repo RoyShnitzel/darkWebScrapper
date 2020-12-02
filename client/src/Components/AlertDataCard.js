@@ -44,7 +44,9 @@ export default function AlertDataCard({ data, fetchData }) {
             color="textSecondary"
             gutterBottom
           >
-            Author: {data.author} {data.score ? `Score: ${data.score}` : ""}
+            <div style={{ fontFamily: "DM Sans" }}>
+              Author: {data.author} {data.score ? `Score: ${data.score}` : ""}
+            </div>
           </Typography>
           <Button onClick={() => deleteHandler(data.Alerts)} color="primary">
             Delete Alert
@@ -52,25 +54,29 @@ export default function AlertDataCard({ data, fetchData }) {
         </div>
         {data.Alerts && data.Alerts.length > 0 ? (
           <Typography style={{ color: "red" }} variant="h5" component="h2">
-            Alert KeyWords:{" "}
-            {data.Alerts.map((alert) => (
-              <Chip
-                key={alert.id}
-                label={`${alert.keyWord} : ${alert.match}`}
-              />
-            ))}
+            <div style={{ fontFamily: "DM Sans" }}>
+              Alert KeyWords:{" "}
+              {data.Alerts.map((alert) => (
+                <Chip
+                  key={alert.id}
+                  label={`${alert.keyWord} : ${alert.match}`}
+                />
+              ))}
+            </div>
           </Typography>
         ) : null}
         <Typography variant="h5" component="h2">
-          Title: {data.title}
+          <div style={{ fontFamily: "DM Sans" }}>Title: {data.title}</div>
         </Typography>
         <Typography variant="body2" component="p">
-          {data.content}
+          <div style={{ fontFamily: "DM Sans" }}>{data.content}</div>
         </Typography>
       </CardContent>
       <CardActions>
         <Typography size="small">
-          Date: {new Date(data.date).toUTCString()}
+          <div style={{ fontFamily: "DM Sans" }}>
+            Date: {new Date(data.date).toUTCString()}
+          </div>
         </Typography>
       </CardActions>
     </Card>

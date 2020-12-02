@@ -92,7 +92,7 @@ function MainPage() {
           })
         ) : (
           <div>
-            <h1>Cards Not Found</h1>
+            <h2>Cards Not Found</h2>
           </div>
         )}
       </div>
