@@ -42,7 +42,7 @@ export default function DataCard({ data }) {
         {data.nerAnalysis && data.nerAnalysis.length > 0 ? (
           <Typography variant="h5" component="h2">
             {data.nerAnalysis.map((tag) => (
-              <Chip label={tag} />
+              <Chip key={tag} label={tag} />
             ))}
           </Typography>
         ) : null}

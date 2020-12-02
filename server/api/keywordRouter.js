@@ -1,11 +1,12 @@
 const keyWordRouter = require("express").Router();
-const { KeyWord } = require("../models");
+const { KeyWord, Alert } = require("../models");
 const { Op } = require("sequelize");
+const alertsFinder = require("../alertsFinder/alertFinder");
 
 // get all data
 keyWordRouter.get("/", async (req, res) => {
   try {
-    allData = await KeyWord.findAll({ order: [["date", "DESC"]] });
+    allData = await KeyWord.findAll();
     res.json(allData);
   } catch (error) {
     console.error(error);
@@ -24,6 +25,7 @@ keyWordRouter.post("/", async (req, res) => {
       res.status(304).json({ message: "KeyWord already exists" });
     } else {
       await KeyWord.create({ keyWord });
+      alertsFinder();
       res.sendStatus(201);
     }
   } catch (error) {
@@ -53,11 +55,18 @@ keyWordRouter.patch("/:id", async (req, res) => {
 keyWordRouter.delete("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    await KeyWord.destroy({
-      where: {
-        id,
-      },
-    });
+    const keyWordToDelete = await KeyWord.findByPk(id);
+    if (keyWordToDelete) {
+      await KeyWord.destroy({
+        where: {
+          id,
+        },
+      });
+      await Alert.destroy({
+        where: { keyWord: keyWordToDelete.keyWord },
+        force: true,
+      });
+    }
     res.sendStatus(204);
   } catch (error) {
     console.error(error);

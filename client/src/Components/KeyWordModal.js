@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
+import Chip from "@material-ui/core/Chip";
+import { useHistory } from "react-router-dom";
 
 function getModalStyle() {
   const top = 50;
@@ -29,42 +29,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function KeyWordModal() {
+export default function KeyWordModal({
+  open,
+  setOpen,
+  keyWordsData,
+  fetchKeyWordsData,
+}) {
   const classes = useStyles();
   const [modalStyle] = useState(getModalStyle);
-  const [open, setOpen] = useState(false);
-  const [keyWord, setKeyWord] = useState();
-  const [keyWordsData, setKeyWordsData] = useState([]);
+  const [keyWord, setKeyWord] = useState("");
+  const [remove, setRemove] = useState("");
+  const history = useHistory();
 
-  const fetchKeyWordsData = async () => {
-    const { data } = await axios.get("/api/keyword");
-    setKeyWordsData(data);
-  };
-
-  useEffect(() => {
-    fetchKeyWordsData();
-  }, []);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const AddKeyWord = async () => {
+  const addKeyWord = async () => {
     if (keyWord.length > 0) {
-      const response = axios.post("/api/keyword", {
+      await axios.post("/api/keyword", {
         keyWord,
       });
+      setKeyWord("");
+      fetchKeyWordsData();
     }
-    setKeyWord("");
+  };
+
+  const removeKeyWord = async () => {
+    if (remove) {
+      await axios.delete(`/api/keyword/${remove}`);
+      setRemove("");
+      fetchKeyWordsData();
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
+    history.push("/");
   };
 
   return (
     <div>
-      <Button onClick={handleOpen}>Add KeyWord</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -73,8 +74,20 @@ export default function KeyWordModal() {
       >
         <div style={modalStyle} className={classes.paper}>
           <h2 id="simple-modal-title" style={{ textAlign: "center" }}>
-            Add KeyWord For Analysis
+            KeyWords For Analysis
           </h2>
+          <div style={{ textAlign: "center" }}>KeyWords:</div>
+          <br />
+          <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+            {keyWordsData.length > 0
+              ? keyWordsData.map((keyWord) => {
+                  return <Chip key={keyWord.id} label={keyWord.keyWord} />;
+                })
+              : null}
+          </div>
+          <br />
+          <div style={{ textAlign: "center" }}>Enter a KeyWord to Add:</div>
+          <br />
           <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
             <TextField
               onChange={(event) => setKeyWord(event.target.value)}
@@ -83,11 +96,39 @@ export default function KeyWordModal() {
               label="KeyWord"
             />
             <Button
-              onClick={() => AddKeyWord()}
+              onClick={() => addKeyWord()}
               variant="contained"
               color="primary"
             >
               Add
+            </Button>
+          </div>
+          <br />
+          <div style={{ textAlign: "center" }}>Choose a KeyWord to Delete:</div>
+          <br />
+          <div style={{ display: "flex", justifyContent: "center", gap: 10 }}>
+            <select
+              onChange={(event) => setRemove(event.target.value)}
+              name="keywords"
+              id="keywords"
+            >
+              <option value="">select...</option>
+              {keyWordsData.length > 0
+                ? keyWordsData.map((keyWord) => {
+                    return (
+                      <option key={keyWord.id} value={keyWord.id}>
+                        {keyWord.keyWord}
+                      </option>
+                    );
+                  })
+                : null}
+            </select>
+            <Button
+              onClick={() => removeKeyWord()}
+              variant="contained"
+              color="primary"
+            >
+              Delete
             </Button>
           </div>
         </div>

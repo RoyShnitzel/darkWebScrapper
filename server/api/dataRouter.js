@@ -1,5 +1,5 @@
 const scrapperRouter = require("express").Router();
-const { Data, KeyWord } = require("../models");
+const { Data } = require("../models");
 const { Op } = require("sequelize");
 const ner = require("wink-ner");
 const winkTokenizer = require("wink-tokenizer");

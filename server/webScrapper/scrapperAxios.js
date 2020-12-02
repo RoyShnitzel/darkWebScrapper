@@ -2,6 +2,7 @@ const cheerio = require("cheerio");
 const axios = require("axios");
 const SocksAgent = require("axios-socks5-agent");
 const { Data } = require("../models");
+const eventEmitter = require("../eventEmitter");
 switch (process.env.SERVER_ENVIRONMENT) {
   case "development":
     IP_ADDRESS = "127.0.0.1";
@@ -73,11 +74,13 @@ module.exports = async function main() {
       .filter((item) => !!item);
     await Data.bulkCreate(data);
     if (data.length > 0) {
+      eventEmitter.emit("newData", data.length);
       console.log(data);
     } else {
       console.log("There is No New Data");
     }
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
+    eventEmitter.emit("scrapperFailed");
   }
 };

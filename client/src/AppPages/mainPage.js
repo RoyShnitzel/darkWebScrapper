@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import DataCard from "./Components/DataCard";
-import Search from "./Components/Search";
+import DataCard from "../Components/DataCard";
+import Search from "../Components/Search";
 import Button from "@material-ui/core/Button";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
@@ -88,7 +88,7 @@ function MainPage() {
       >
         {data.length > 0 ? (
           data.map((element) => {
-            return <DataCard data={element} />;
+            return <DataCard key={element.id} data={element} />;
           })
         ) : (
           <div>
