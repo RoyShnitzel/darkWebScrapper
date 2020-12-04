@@ -10,6 +10,6 @@ async function runScrapperInterval() {
   }, 1000 * 60 * 2);
 }
 
-setTimeout(() => {
-  runScrapperInterval();
-}, 1000 * 60);
+// setTimeout(() => {
+runScrapperInterval();
+// }, 1000 * 60);
