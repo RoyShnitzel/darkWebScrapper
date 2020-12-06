@@ -2,11 +2,11 @@ require("dotenv").config();
 const scrapper = require("./scrapperAxios");
 
 async function runScrapperInterval() {
-  scrapper();
+  scrapper(10);
   console.log("scrapper is running");
   setInterval(() => {
     console.log("scrapper is running");
-    scrapper();
+    scrapper(3);
   }, 1000 * 60 * 2);
 }
 

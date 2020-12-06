@@ -1,7 +1,9 @@
 # base config
 scrapper-url: https://pastebin.com/archive
-base-url: https://pastebin.com/
+base-url: https://pastebin.com
 dark-web:
+
+need-timeout: true
 
 tasks:
   get-pastes-links:
@@ -12,5 +14,7 @@ tasks:
     html-tag: textarea
   get-pastes-dates:
     html-tag: body > div.wrap > div.container > div.content > div.post-view > div.details > div.info-bar > div.info-bottom > div.date
+    is-in-string:
   get-pastes-authors:
     html-tag: body > div.wrap > div.container > div.content > div.post-view > div.details > div.info-bar > div.info-bottom > div.username
+    is-in-string:
