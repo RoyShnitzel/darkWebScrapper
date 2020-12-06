@@ -5,7 +5,6 @@ import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Chip from "@material-ui/core/Chip";
-import { useHistory } from "react-router-dom";
 
 function getModalStyle() {
   const top = 50;
@@ -39,7 +38,6 @@ export default function KeyWordModal({
   const [modalStyle] = useState(getModalStyle);
   const [keyWord, setKeyWord] = useState("");
   const [remove, setRemove] = useState("");
-  const history = useHistory();
 
   const addKeyWord = async () => {
     if (keyWord.length > 0) {
@@ -61,7 +59,6 @@ export default function KeyWordModal({
 
   const handleClose = () => {
     setOpen(false);
-    history.push("/");
   };
 
   return (

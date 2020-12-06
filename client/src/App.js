@@ -29,10 +29,10 @@ function App() {
             />
             <Switch>
               <Route exact path="/alerts">
-                <AlertsPage />
+                <AlertsPage notifications={data} />
               </Route>
               <Route exact path="/">
-                <MainPage />
+                <MainPage notifications={data} />
               </Route>
               <Route path="*">
                 <NotFound />

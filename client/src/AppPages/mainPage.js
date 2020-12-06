@@ -7,7 +7,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import ReplyIcon from "@material-ui/icons/Reply";
 
-function MainPage() {
+function MainPage({ notifications }) {
   const [data, setData] = useState([]);
   const [sentiment, setSentiment] = useState("default");
   const [url, setUrl] = useState("/api/data");
@@ -30,7 +30,7 @@ function MainPage() {
 
   useEffect(() => {
     fetchData();
-  }, [url]);
+  }, [url, notifications]);
 
   return (
     <div

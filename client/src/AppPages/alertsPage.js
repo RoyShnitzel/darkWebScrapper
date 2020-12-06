@@ -3,7 +3,7 @@ import axios from "axios";
 import AlertDataCard from "../Components/AlertDataCard";
 import Search from "../Components/Search";
 
-function AlertsPage() {
+function AlertsPage({ notifications }) {
   const [data, setData] = useState([]);
 
   const fetchData = async (searchValue) => {
@@ -14,7 +14,7 @@ function AlertsPage() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [notifications]);
 
   return (
     <div
